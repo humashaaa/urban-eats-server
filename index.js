@@ -49,6 +49,13 @@ async function run() {
       res.send(result)
     })
 
+    // get cart info by specific user
+    app.get(`/cart/:email`, async(req, res)=>{
+      const query = {email : req.params.email}
+      const result = await cartCollection.findOne(query).toArray()
+      res.send(result)
+    })
+
     // menu related api
 
     app.get("/menu", async (req, res) => {
