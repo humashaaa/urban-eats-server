@@ -28,6 +28,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const usersCollection = client.db("urbanEats").collection("users");
+    const cartCollection = client.db("urbanEats").collection("cart");
     const menuCollection = client.db("urbanEats").collection("menu");
     const reviewCollection = client.db("urbanEats").collection("reviews");
 
@@ -39,10 +40,23 @@ async function run() {
       res.send(result);
     });
 
+    // cart related api
+
+    //TODO - user can not add to cart same menu twice
+    app.post(`/carts`, async(req, res)=>{
+      const cartItem = req.body
+      const result = await cartCollection.insertOne(cartItem)
+      res.send(result)
+    })
+
+    // menu related api
+
     app.get("/menu", async (req, res) => {
       const result = await menuCollection.find().toArray();
       res.send(result);
     });
+
+    // review related api
     app.get("/reviews", async (req, res) => {
       const result = await reviewCollection.find().toArray();
       res.send(result);
