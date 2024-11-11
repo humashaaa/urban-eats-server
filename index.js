@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -52,7 +52,15 @@ async function run() {
     // get cart info by specific user
     app.get(`/cart/:email`, async(req, res)=>{
       const query = {email : req.params.email}
-      const result = await cartCollection.findOne(query).toArray()
+      const result = await cartCollection.find(query).toArray()
+      res.send(result)
+    })
+
+    // delete cart item from my cart
+    app.delete(`/carts/:id`, async(req, res)=>{
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result = await cartCollection.deleteOne(query)
       res.send(result)
     })
 
